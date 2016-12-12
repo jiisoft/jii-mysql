@@ -7,151 +7,140 @@ var _map = require('lodash/map');
 var BaseConnection = require('jii/data/BaseConnection');
 var mysql = require('mysql');
 var Schema = require('./Schema');
+class Connection extends BaseConnection {
 
-/**
- *
- * @class Jii.mysql.Connection
- * @extends Jii.data.BaseConnection
- */
-var Connection = Jii.defineClass('Jii.mysql.Connection', /** @lends Jii.mysql.Connection.prototype */{
+    preInit() {
+        this._connection = null;
+        /**
+         * @type {string}
+         */
+        this.database = '';
+        /**
+         * @type {string}
+         */
+        this.port = 3306;
+        /**
+         * @type {string}
+         */
+        this.host = '127.0.0.1';
 
-	__extends: BaseConnection,
+        super.preInit(...arguments);
 
-	/**
-	 * @type {string}
-	 */
-	host: '127.0.0.1',
+        /**
+     * @type {string}
+     */
+        this.driverName = 'mysql';
+        /**
+     * @type {string|object}
+     */
+        this.schemaClass = Schema;
+    }
 
-	/**
-	 * @type {string}
-	 */
-	port: 3306,
+    /**
+     * Initializes the DB connection.
+     * This method is invoked right after the DB connection is established.
+     * @protected
+     */
+    _initConnection() {
+        this._connection = mysql.createConnection({
+            host: this.host,
+            port: this.port,
+            user: this.username,
+            password: this.password,
+            database: this.database,
+            timezone: 'local',
+            typeCast: this._typeCast
+        });
+        this._connection.on('error', this._onError);
+        this._connection.connect();
 
-	/**
-	 * @type {string}
-	 */
-	database: '',
+        if (this.charset !== null) {
+            this.exec('SET NAMES ' + this.quoteValue(this.charset));
+        }
 
-	/**
-	 * @type {string|object}
-	 */
-	schemaClass: Schema,
+        super._initConnection();
+    }
 
-	/**
-	 * @type {string}
-	 */
-	driverName: 'mysql',
+    /**
+     * @protected
+     */
+    _closeConnection() {
+        if (this._connection) {
+            this._connection.end();
+        }
+    }
 
-	_connection: null,
+    /**
+     * Disable auto typing
+     * @returns {string}
+     * @private
+     */
+    _typeCast(field, next) {
+        return field.string();
+    }
 
-	/**
-	 * Initializes the DB connection.
-	 * This method is invoked right after the DB connection is established.
-	 * @protected
-	 */
-	_initConnection() {
-		this._connection = mysql.createConnection({
-			host: this.host,
-			port: this.port,
-			user: this.username,
-			password: this.password,
-			database: this.database,
-			timezone: 'local',
-			typeCast: this._typeCast
-		});
-		this._connection.on('error', this._onError);
-		this._connection.connect();
+    /**
+     *
+     * @param {string} message
+     * @private
+     */
+    _onError(message) {}
 
-		if (this.charset !== null) {
-			this.exec('SET NAMES ' + this.quoteValue(this.charset));
-		}
+    /**
+     *
+     * @param {string} sql
+     * @param {string} [method]
+     * @returns {Promise}
+     */
+    exec(sql, method) {
+        method = method || null;
 
-		this.__super();
-	},
+        return new Promise((resolve, reject) => {
+            this._connection.query(sql, (err, rows) => {
+                if (err) {
+                    Jii.error('Database query error, sql: `' + sql + '`, error: ' + String(err));
 
-	/**
-	 * @protected
-	 */
-	_closeConnection() {
-		if (this._connection) {
-			this._connection.end();
-		}
-	},
+                    if (method === 'execute' || method === null) {
+                        reject(new SqlQueryException(err));
+                    } else {
+                        resolve(false);
+                    }
+                    return;
+                }
 
-	/**
-	 * Disable auto typing
-	 * @returns {string}
-	 * @private
-	 */
-	_typeCast(field, next) {
-		return field.string();
-	},
+                var result = null;
+                switch (method) {
+                    case 'execute':
+                        result = {
+                            affectedRows: rows.affectedRows,
+                            insertId: rows.insertId || null
+                        };
+                        break;
 
-	/**
-	 *
-	 * @param {string} message
-	 * @private
-	 */
-	_onError(message) {
+                    case 'one':
+                        result = rows.length > 0 ? rows[0] : null;
+                        break;
 
-	},
+                    case 'all':
+                        result = rows;
+                        break;
 
-	/**
-	 *
-	 * @param {string} sql
-	 * @param {string} [method]
-	 * @returns {Promise}
-	 */
-	exec(sql, method) {
-		method = method || null;
+                    case 'scalar':
+                        result = rows.length > 0 ? _values(rows[0])[0] : null;
+                        break;
 
-		return new Promise((resolve, reject) => {
-			this._connection.query(sql, (err, rows) => {
-				if (err) {
-					Jii.error('Database query error, sql: `' + sql + '`, error: ' + String(err));
+                    case 'column':
+                        result = _map(rows, row => _values(row)[0]);
+                        break;
 
-					if (method === 'execute' || method === null) {
-						reject(new SqlQueryException(err));
-					} else {
-						resolve(false);
-					}
-					return;
-				}
+                    default:
+                        result = rows;
+                }
 
-				var result = null;
-				switch (method) {
-					case 'execute':
-						result = {
-							affectedRows : rows.affectedRows,
-							insertId: rows.insertId || null
-						};
-						break;
+                resolve(result);
+            });
+        });
+    }
 
-					case 'one':
-						result = rows.length > 0 ? rows[0] : null;
-						break;
-
-					case 'all':
-						result = rows;
-						break;
-
-					case 'scalar':
-						result = rows.length > 0 ? _values(rows[0])[0] : null;
-						break;
-
-					case 'column':
-						result = _map(rows, row => _values(row)[0]);
-						break;
-
-					default:
-						result = rows;
-				}
-
-				resolve(result);
-			});
-		});
-	}
-
-});
-
+}
 module.exports = Connection;
