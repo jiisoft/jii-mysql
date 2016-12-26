@@ -1,3 +1,8 @@
+/**
+ * @author Vladimir Kozhin <affka@affka.ru>
+ * @license MIT
+ */
+
 'use strict';
 
 var Jii = require('jii');
@@ -7,18 +12,22 @@ var _map = require('lodash/map');
 var BaseConnection = require('jii/data/BaseConnection');
 var mysql = require('mysql');
 var Schema = require('./Schema');
+
 class Connection extends BaseConnection {
 
     preInit() {
         this._connection = null;
+
         /**
          * @type {string}
          */
         this.database = '';
+
         /**
          * @type {string}
          */
         this.port = 3306;
+
         /**
          * @type {string}
          */
@@ -27,12 +36,13 @@ class Connection extends BaseConnection {
         super.preInit(...arguments);
 
         /**
-     * @type {string}
-     */
+         * @type {string}
+         */
         this.driverName = 'mysql';
+
         /**
-     * @type {string|object}
-     */
+         * @type {string|object}
+         */
         this.schemaClass = Schema;
     }
 

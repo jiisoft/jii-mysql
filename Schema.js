@@ -16,14 +16,15 @@ var _trim = require('lodash/trim');
 var _trimStart = require('lodash/trimStart');
 var _trimEnd = require('lodash/trimEnd');
 var BaseSchema = require('jii/data/BaseSchema');
+
 class Schema extends BaseSchema {
 
     preInit() {
         super.preInit(...arguments);
 
         /**
-     * @var array mapping from physical column types (keys) to abstract column types (values)
-     */
+         * @var array mapping from physical column types (keys) to abstract column types (values)
+         */
         this.typeMap = {
             tinyint: BaseSchema.TYPE_SMALLINT,
             bit: BaseSchema.TYPE_SMALLINT,

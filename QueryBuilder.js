@@ -1,3 +1,8 @@
+/**
+ * @author Vladimir Kozhin <affka@affka.ru>
+ * @license MIT
+ */
+
 'use strict';
 
 var Jii = require('jii');
@@ -8,14 +13,15 @@ var _each = require('lodash/each');
 var _first = require('lodash/first');
 var BaseQueryBuilder = require('jii/data/QueryBuilder');
 var BaseSchema = require('jii/data/BaseSchema');
+
 class QueryBuilder extends BaseQueryBuilder {
 
     preInit() {
         super.preInit(...arguments);
 
         /**
-     * @type {object} mapping from abstract column types (keys) to physical column types (values).
-     */
+         * @type {object} mapping from abstract column types (keys) to physical column types (values).
+         */
         this.typeMap = {
             [BaseSchema.TYPE_PK]: 'int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY',
             [BaseSchema.TYPE_BIGPK]: 'bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY',
