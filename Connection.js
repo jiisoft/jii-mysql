@@ -5,13 +5,13 @@
 
 'use strict';
 
-var Jii = require('jii');
-var SqlQueryException = require('jii/data/SqlQueryException');
-var _values = require('lodash/values');
-var _map = require('lodash/map');
-var BaseConnection = require('jii/data/BaseConnection');
-var mysql = require('mysql');
-var Schema = require('./Schema');
+const Jii = require('jii');
+const SqlQueryException = require('jii/data/SqlQueryException');
+const _values = require('lodash/values');
+const _map = require('lodash/map');
+const BaseConnection = require('jii/data/BaseConnection');
+const mysql = require('mysql');
+const Schema = require('./Schema');
 
 class Connection extends BaseConnection {
 

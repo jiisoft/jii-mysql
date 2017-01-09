@@ -5,14 +5,14 @@
 
 'use strict';
 
-var Jii = require('jii');
-var ApplicationException = require('jii/exceptions/ApplicationException');
-var InvalidParamException = require('jii/exceptions/InvalidParamException');
-var _values = require('lodash/values');
-var _each = require('lodash/each');
-var _first = require('lodash/first');
-var BaseQueryBuilder = require('jii/data/QueryBuilder');
-var BaseSchema = require('jii/data/BaseSchema');
+const Jii = require('jii');
+const ApplicationException = require('jii/exceptions/ApplicationException');
+const InvalidParamException = require('jii/exceptions/InvalidParamException');
+const _values = require('lodash/values');
+const _each = require('lodash/each');
+const _first = require('lodash/first');
+const BaseQueryBuilder = require('jii/data/QueryBuilder');
+const BaseSchema = require('jii/data/BaseSchema');
 
 class QueryBuilder extends BaseQueryBuilder {
 

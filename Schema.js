@@ -4,18 +4,18 @@
  */
 'use strict';
 
-var Jii = require('jii');
-var QueryBuilder = require('./QueryBuilder');
-var TableSchema = require('jii/data/TableSchema');
-var Expression = require('jii/data/Expression');
-var SqlQueryException = require('jii/data/SqlQueryException');
-var _has = require('lodash/has');
-var _each = require('lodash/each');
-var _values = require('lodash/values');
-var _trim = require('lodash/trim');
-var _trimStart = require('lodash/trimStart');
-var _trimEnd = require('lodash/trimEnd');
-var BaseSchema = require('jii/data/BaseSchema');
+const Jii = require('jii');
+const QueryBuilder = require('./QueryBuilder');
+const TableSchema = require('jii/data/TableSchema');
+const Expression = require('jii/data/Expression');
+const SqlQueryException = require('jii/data/SqlQueryException');
+const _has = require('lodash/has');
+const _each = require('lodash/each');
+const _values = require('lodash/values');
+const _trim = require('lodash/trim');
+const _trimStart = require('lodash/trimStart');
+const _trimEnd = require('lodash/trimEnd');
+const BaseSchema = require('jii/data/BaseSchema');
 
 class Schema extends BaseSchema {
 
