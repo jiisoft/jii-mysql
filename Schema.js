@@ -78,7 +78,7 @@ class Schema extends BaseSchema {
 
     /**
      * Creates a query builder for the MySQL database.
-     * @return {Jii.mysql.QueryBuilder} query builder instance
+     * @return {QueryBuilder} query builder instance
      */
     createQueryBuilder() {
         return new QueryBuilder(this.db);
@@ -87,7 +87,7 @@ class Schema extends BaseSchema {
     /**
      * Loads the metadata for the specified table.
      * @param {string} name table name
-     * @return {Jii.data.TableSchema} driver dependent table metadata. Null if the table does not exist.
+     * @return {TableSchema} driver dependent table metadata. Null if the table does not exist.
      */
     _loadTableSchema(name) {
         var table = new TableSchema();
@@ -104,7 +104,7 @@ class Schema extends BaseSchema {
 
     /**
      * Resolves the table name and schema name (if any).
-     * @param {Jii.data.TableSchema} table the table metadata object
+     * @param {TableSchema} table the table metadata object
      * @param {string} name the table name
      */
     _resolveTableNames(table, name) {
@@ -123,7 +123,7 @@ class Schema extends BaseSchema {
     /**
      * Loads the column information into a [[ColumnSchema]] object.
      * @param {object} info column information
-     * @return {Jii.data.ColumnSchema} the column schema object
+     * @return {ColumnSchema} the column schema object
      */
     _loadColumnSchema(info) {
         var column = this._createColumnSchema();
@@ -192,7 +192,7 @@ class Schema extends BaseSchema {
 
     /**
      * Collects the metadata of table columns.
-     * @param {Jii.data.TableSchema} table the table metadata
+     * @param {TableSchema} table the table metadata
      * @return {Promise} whether the table exists in the database
      * @throws \Exception if DB query fails
      */
@@ -232,7 +232,7 @@ class Schema extends BaseSchema {
 
     /**
      * Gets the CREATE TABLE sql string.
-     * @param {Jii.data.TableSchema} table the table metadata
+     * @param {TableSchema} table the table metadata
      * @return {Promise} sql the result of 'SHOW CREATE TABLE'
      */
     _getCreateTableSql(table) {
@@ -249,7 +249,7 @@ class Schema extends BaseSchema {
 
     /**
      * Collects the foreign key column details for the given table.
-     * @param {Jii.data.TableSchema} table the table metadata
+     * @param {TableSchema} table the table metadata
      */
     _findConstraints(table) {
         return this._getCreateTableSql(table).then(sql => {
@@ -303,7 +303,7 @@ class Schema extends BaseSchema {
      * }
      * ~~~
      *
-     * @param {Jii.data.TableSchema} table the table metadata
+     * @param {TableSchema} table the table metadata
      * @return {Promise} all unique indexes for the given table.
      */
     findUniqueIndexes(table) {

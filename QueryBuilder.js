@@ -48,7 +48,7 @@ class QueryBuilder extends BaseQueryBuilder {
      * @param {string} oldName the old name of the column. The name will be properly quoted by the method.
      * @param {string} newName the new name() of the column. The name will be properly quoted by the method.
      * @returns {string} the SQL statement for renaming a DB column.
-     * @throws Jii.exceptions.ApplicationException
+     * @throws ApplicationException
      */
     renameColumn(table, oldName, newName) {
         var quoteTable = this.db.quoteTableName(table);
@@ -105,7 +105,7 @@ class QueryBuilder extends BaseQueryBuilder {
      * @param {*} [value] the value for the primary key of the next new row() inserted. If this is not set,
      * the next new row()'s primary key will have a value 1.
      * @returns {string} the SQL statement for resetting sequence
-     * @throws Jii.exceptions.InvalidParamException if the table does not exist or there is no sequence associated with the table.
+     * @throws InvalidParamException if the table does not exist or there is no sequence associated with the table.
      */
     resetSequence(tableName, value) {
         value = value || null;
