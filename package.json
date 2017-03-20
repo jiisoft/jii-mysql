@@ -1,6 +1,6 @@
 {
   "name": "jii-mysql",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "description": "MySql adapter to Jii Database",
   "main": "index.js",
   "author": "Vladimir Kozhin <affka@affka.ru>",
